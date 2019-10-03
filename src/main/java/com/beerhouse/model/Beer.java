@@ -6,23 +6,25 @@ import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Beer implements Serializable {
+
+
 	@JsonProperty("id")
-	private Integer id = null;
+	private Integer id;
 
 	@JsonProperty("name")
-	private String name = null;
+	private String name;
 
 	@JsonProperty("ingredients")
-	private String ingredients = null;
+	private String ingredients;
 
 	@JsonProperty("alcoholContent")
-	private String alcoholContent = null;
+	private String alcoholContent;
 
 	@JsonProperty("price")
-	private BigDecimal price = null;
+	private BigDecimal price;
 
 	@JsonProperty("category")
-	private String category = null;
+	private String category;
 
 	public Integer getId() {
 		return id;
