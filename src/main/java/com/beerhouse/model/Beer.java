@@ -3,20 +3,33 @@ package com.beerhouse.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@Entity
 public class Beer implements Serializable {
 
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonProperty("id")
 	private Integer id;
 
 	@JsonProperty("name")
+	@NotEmpty
 	private String name;
 
 	@JsonProperty("ingredients")
 	private String ingredients;
 
+	@Column(name = "alcohol_content")
 	@JsonProperty("alcoholContent")
 	private String alcoholContent;
 
