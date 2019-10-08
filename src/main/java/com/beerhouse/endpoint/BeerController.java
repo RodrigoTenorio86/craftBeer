@@ -23,7 +23,8 @@ import com.beerhouse.repository.BeerRepository;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = "beers", consumes = "application/json", produces = "application/json")
+@RequestMapping(path = "/beers", produces = { "application/json" }, 
+                                 consumes = { "application/json" })
 public class BeerController {
 	private final BeerRepository beerDao;
 
@@ -46,27 +47,35 @@ public class BeerController {
 	}
 
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<?> findByIdBeer(@PathVariable("id") String id) {
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<?> findByIdBeer(@PathVariable("id") Integer id) {
+		System.out.println("valor   " + id);
+		verifyIfBeerExists(id);
+
+		Beer beer = beerDao.getOne(id);
+		return new ResponseEntity<>(beer, HttpStatus.OK);
 	}
 
 	@PutMapping(path = "/{id}")
+	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<?> updateBeer(@PathVariable("id") String id, @RequestBody Beer beer) {
+		verifyIfBeerExists(Integer.valueOf(id));
+		beerDao.save(beer);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PatchMapping(path = "/{id}")
 	public ResponseEntity<?> changeBeer(@PathVariable("id") String id, @RequestBody Beer beer) {
 		verifyIfBeerExists(Integer.valueOf(id));
+		beerDao.save(beer);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity<?> deleteBeer(@PathVariable("id") String id) {
 		verifyIfBeerExists(Integer.valueOf(id));
+		beerDao.delete(Integer.valueOf(id));
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-
 
 	private void verifyIfBeerExists(Integer id) {
 		if (beerDao.findOne(id) == null)

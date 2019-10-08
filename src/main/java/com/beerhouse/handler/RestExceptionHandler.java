@@ -2,6 +2,9 @@ package com.beerhouse.handler;
 
 import com.beerhouse.error.ResourceNotFoundDetails;
 import com.beerhouse.error.ResourceNotFoundException;
+
+import java.util.Date;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +21,6 @@ public class RestExceptionHandler {
                 .detail(rnfnException.getMessage())
                 .developerMessage(rnfnException.getClass().getName())
                 .build();
-        return new ResposeEntity<>(build, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(build, HttpStatus.NOT_FOUND);
     }
 }
