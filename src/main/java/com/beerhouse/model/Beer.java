@@ -42,6 +42,19 @@ public class Beer implements Serializable {
 
 	@JsonProperty("category")
 	private String category;
+	
+	
+
+	public Beer() {	}
+
+	public Beer( String name, String ingredients, String alcoholContent, BigDecimal price, String category) {
+		
+		this.name = name;
+		this.ingredients = ingredients;
+		this.alcoholContent = alcoholContent;
+		this.price = price;
+		this.category = category;
+	}
 
 	public Integer getId() {
 		return id;
