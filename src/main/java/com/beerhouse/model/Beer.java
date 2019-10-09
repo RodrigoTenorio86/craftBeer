@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Digits;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -23,10 +24,11 @@ public class Beer implements Serializable {
 	private Integer id;
 
 	@JsonProperty("name")
-	@NotEmpty
+	@NotEmpty(message="Campo nome é Obrigatório.")
 	private String name;
 
 	@JsonProperty("ingredients")
+	@NotEmpty(message="Campo ingredients é Obrigatório.")
 	private String ingredients;
 
 	@Column(name = "alcohol_content")
@@ -34,6 +36,8 @@ public class Beer implements Serializable {
 	private String alcoholContent;
 
 	@JsonProperty("price")
+	//@NotEmpty
+	//@Digits(integer=8,fraction=2)
 	private BigDecimal price;
 
 	@JsonProperty("category")

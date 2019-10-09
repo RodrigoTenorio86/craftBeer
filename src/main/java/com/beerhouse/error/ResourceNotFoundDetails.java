@@ -1,82 +1,55 @@
 package com.beerhouse.error;
 
-public class ResourceNotFoundDetails {
-    private String title;
-    private int status;
-    private String detail;
-    private long timestamp;
-    private String developerMessage;
+public class ResourceNotFoundDetails extends ErrorDetail {
 
-    private ResourceNotFoundDetails() {
-    }
+	// Class ResourceNotFoundDetailsBuilder
+	public static final class Builder {
+		private String title;
+		private int status;
+		private String detail;
+		private long timestamp;
+		private String developerMessage;
 
-    public String getTitle() {
-        return title;
-    }
+		private Builder() {
+		}
 
-    public int getStatus() {
-        return status;
-    }
+		public static Builder newBuilder() {
+			return new Builder();
+		}
 
-    public String getDetail() {
-        return detail;
-    }
+		public Builder title(String title) {
+			this.title = title;
+			return this;
+		}
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+		public Builder status(int status) {
+			this.status = status;
+			return this;
+		}
 
-    public String getDeveloperMessage() {
-        return developerMessage;
-    }
-//Class ResourceNotFoundDetailsBuilder
-    public static final class Builder {
-        private String title;
-        private int status;
-        private String detail;
-        private long timestamp;
-        private String developerMessage;
+		public Builder detail(String detail) {
+			this.detail = detail;
+			return this;
+		}
 
-        private Builder() {
-        }
+		public Builder timestamp(long timestamp) {
+			this.timestamp = timestamp;
+			return this;
+		}
 
-        public static Builder newBuilder() {
-            return new Builder();
-        }
+		public Builder developerMessage(String developerMessage) {
+			this.developerMessage = developerMessage;
+			return this;
+		}
 
-        public Builder title(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public Builder status(int status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder detail(String detail) {
-            this.detail = detail;
-            return this;
-        }
-
-        public Builder timestamp(long timestamp) {
-            this.timestamp = timestamp;
-            return this;
-        }
-
-        public Builder developerMessage(String developerMessage) {
-            this.developerMessage = developerMessage;
-            return this;
-        }
-
-        public ResourceNotFoundDetails build() {
-            ResourceNotFoundDetails resourceNotFoundDetails = new ResourceNotFoundDetails();
-            resourceNotFoundDetails.developerMessage = this.developerMessage;
-            resourceNotFoundDetails.status = this.status;
-            resourceNotFoundDetails.detail = this.detail;
-            resourceNotFoundDetails.timestamp = this.timestamp;
-            resourceNotFoundDetails.title = this.title;
-            return resourceNotFoundDetails;
-        }
-    }
+		public ResourceNotFoundDetails build() {
+			ResourceNotFoundDetails resourceNotFoundDetails = new ResourceNotFoundDetails();
+			resourceNotFoundDetails.setDeveloperMessage(developerMessage);
+			resourceNotFoundDetails.setStatus(status);
+			resourceNotFoundDetails.setDetail(detail);
+			resourceNotFoundDetails.setTimestamp(timestamp);
+			resourceNotFoundDetails.setTitle(title);
+			return resourceNotFoundDetails;
+		}
+	}
 }
