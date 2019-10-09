@@ -29,13 +29,13 @@ public class ValidationErrorDetails extends ErrorDetail {
 			return new Builder();
 		}
 
-		public Builder field(String title) {
-			this.title = title;
+		public Builder field(String field) {
+			this.field = field;
 			return this;
 		}
 
-		public Builder fieldMessage(String title) {
-			this.title = title;
+		public Builder fieldMessage(String fieldMessage) {
+			this.fieldMessage = fieldMessage;
 			return this;
 		}
 
