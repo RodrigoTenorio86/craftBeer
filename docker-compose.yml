@@ -1,7 +1,7 @@
 version:   '3'
 services:
-	mysqlbd:
-		build:
+  mysqlbd:
+    build:
       dockerfile: ./docker/mysql.Dockerfile
       context:  .
 		image:	rodrigotenorio86/mysql
