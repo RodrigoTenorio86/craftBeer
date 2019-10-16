@@ -13,18 +13,17 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Rr123
     api-rest:
-		build:
-			dockerfile: ./docker/Dockerfile
-			context:  .
-		image:	rodrigotenorio86/api-rest-beer
-		container_name:	api-rest
-		ports:
-			- "8080:9000"
-		networks:
-			- production-network
-		depends_on:
-			- "mysqldb"
-
+    build:
+      dockerfile: ./docker/Dockerfile
+      context:  .
+    image:	rodrigotenorio86/api-rest-beer
+    container_name:	api-rest
+    ports:
+      - "8080:9000"
+    networks:
+      - production-network
+    depends_on:
+      - "mysqldb"
 networks:
-	production-network:
-		driver:	bridge
+  production-network:
+    driver:	bridge
