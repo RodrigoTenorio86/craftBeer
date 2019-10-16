@@ -2,8 +2,8 @@ version:   '3'
 services:
 	mysqlbd:
 		build:
-			dockerfile: ./docker/mysql.Dockerfile
-                        context:	.
+      dockerfile: ./docker/mysql.Dockerfile
+      context:  .
 		image:	rodrigotenorio86/mysql
 		container_name:	bd_mysql
 		ports:
@@ -15,7 +15,7 @@ services:
 	api-rest:
 		build:
 			dockerfile: ./docker/Dockerfile
-			context:	.
+			context:  .
 		image:	rodrigotenorio86/api-rest-beer
 		container_name:	api-rest
 		ports:
