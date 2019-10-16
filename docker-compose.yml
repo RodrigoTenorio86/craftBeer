@@ -1,1 +1,20 @@
 version:   '3'
+services:
+	mysql:
+		build:
+			dockerfile: ./docker/mysql.Dockerfile
+                        context:	.
+		image:	rodrigotenorio86/mysql
+		ports:
+			- "3306:3306"
+		environment:
+			MYSQL_ROOT_PASSWORD: Rr123
+	api-rest:
+		build:
+			dockerfile: ./docker/Dockerfile
+			context:	.
+		image:	rodrigotenorio86/api-rest-beer
+		ports:
+			- "8080:9000"
+		depends_on:
+			- "mysql"
