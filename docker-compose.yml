@@ -1,10 +1,10 @@
-version:   '3'
+version:  '3'
 services:
   mysqlbd:
     build:
       dockerfile: ./docker/mysql.Dockerfile
       context:  .
-    image:	rodrigotenorio86/mysql
+    image:  rodrigotenorio86/mysql
     container_name:	bd_mysql
     ports:
       - "3306:3306"
@@ -12,12 +12,12 @@ services:
       - production-network
     environment:
       MYSQL_ROOT_PASSWORD: Rr123
-    api-rest:
+  api-rest:
     build:
       dockerfile: ./docker/Dockerfile
       context:  .
-    image:	rodrigotenorio86/api-rest-beer
-    container_name:	api-rest
+    image:  rodrigotenorio86/api-rest-beer
+    container_name: api-rest
     ports:
       - "8080:9000"
     networks:
