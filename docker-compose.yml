@@ -1,14 +1,16 @@
 version:  '3'
 services:
-  localhost:
+  bd_mysql:
     image:  rodrigotenorio86/mysql
-    container_name: localhost
+    container_name: bd_mysql
     ports:
       - "3306:3306"
     networks:
       - production-network
     environment:
       MYSQL_ROOT_PASSWORD: Rr123
+      MYSQL_ROOT: root
+      MYSQL_PASSWORD: Rr123
       MYSQL_DATABASE: beerhouse
   api-rest:
     image: rodrigotenorio86/api-rest-beer
@@ -18,7 +20,7 @@ services:
     networks:
       - production-network
     depends_on:
-      - "localhost"
+      - "bd_mysql"
 networks:
   production-network:
     driver: bridge
