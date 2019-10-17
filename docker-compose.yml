@@ -1,6 +1,6 @@
 version:  '3'
 services:
-    bd-mysql:
+  bd-mysql:
     image:  rodrigotenorio86/mysql
     container_name: bd-mysql
     ports:
