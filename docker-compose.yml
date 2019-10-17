@@ -1,8 +1,8 @@
 version:  '3'
 services:
-  bd_mysql:
+  localhost:
     image:  rodrigotenorio86/mysql
-    container_name: bd_mysql
+    container_name: localhost
     ports:
       - "3306:3306"
     networks:
@@ -18,7 +18,7 @@ services:
     networks:
       - production-network
     depends_on:
-      - "bd_mysql"
+      - "localhost"
 networks:
   production-network:
     driver: bridge
