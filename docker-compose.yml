@@ -1,8 +1,8 @@
 version:  '3'
 services:
-  bd_mysql:
+    bd-mysql:
     image:  rodrigotenorio86/mysql
-    container_name: bd_mysql
+    container_name: bd-mysql
     ports:
       - "3306:3306"
     networks:
@@ -19,8 +19,14 @@ services:
       - "8080:9000"
     networks:
       - production-network
+    environment:
+      - DATABASE_HOST: localhost
+      - DATABASE_USER: root
+      - DATABASE_NAME: beerhouse
+      - DATABASE_PASSWORD: Rr123
+      - DATABASE_PORT: 3306  
     depends_on:
-      - "bd_mysql"
+      - "bd-mysql"
 networks:
   production-network:
     driver: bridge
