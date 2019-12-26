@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,9 +41,9 @@ public class BeerController {
 	@ApiOperation(value = "", nickname = "beersGet", notes = "", response = Beer.class, responseContainer = "List", tags = {})
 	@ApiResponses(value = {	@ApiResponse(code = 200, message = "Status 200", response = Beer.class, responseContainer = "List") })
 	@GetMapping()
-	public ResponseEntity<Page<Beer>> beersGet(@RequestParam int page,@RequestParam int size) {
+	public ResponseEntity<Page<Beer>> beersGet(@PageableDefault(size=5,page = 0,sort = "price",direction = Direction.ASC) Pageable paginacao) {
 		
-		Pageable paginacao = PageRequest.of(page, size);
+		//Pageable paginacao = PageRequest.of(page, size, Direction.ASC,sort);
 		
 		Page<Beer> beers = beerService.findAll(paginacao);
 		return new ResponseEntity<>(beers, HttpStatus.OK);
