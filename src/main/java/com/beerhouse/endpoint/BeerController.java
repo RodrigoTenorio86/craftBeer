@@ -2,84 +2,93 @@ package com.beerhouse.endpoint;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.beerhouse.error.ResourceNotFoundException;
+import com.beerhouse.endpoint.dto.BeerDTO;
 import com.beerhouse.model.Beer;
-import com.beerhouse.repository.BeerRepository;
+import com.beerhouse.service.BeerService;
 
-import javax.validation.Valid;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping(path = "/beers", produces = { "application/json" }, 
-                                 consumes = { "application/json" })
+@RequestMapping(path = "/beers", produces = { "application/json" }, consumes = { "application/json" })
 public class BeerController {
-	private final BeerRepository beerDao;
-
 	@Autowired
-	public BeerController(BeerRepository beerDao) {
-		this.beerDao = beerDao;
-	}
+	private BeerService beerService;
 
-	@GetMapping
-	public ResponseEntity<?> getAllBeer() {
-		List<Beer> beers = beerDao.findAll();
+	@ApiOperation(value = "", nickname = "beersGet", notes = "", response = Beer.class, responseContainer = "List", tags = {})
+	@ApiResponses(value = {	@ApiResponse(code = 200, message = "Status 200", response = Beer.class, responseContainer = "List") })
+	@GetMapping()
+	public ResponseEntity<List<Beer>> beersGet() {
+		List<Beer> beers = beerService.findAll();
 		return new ResponseEntity<>(beers, HttpStatus.OK);
 	}
 
-	@PostMapping
+	@ApiOperation(value = "", nickname = "beersIdDelete", notes = "", tags = {})
+	@ApiResponses(value = { @ApiResponse(code = 204, message = "Status 204") })
+	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> saveBerr(@Valid @RequestBody Beer beer) {
-		beerDao.save(beer);
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-
-	@GetMapping(path = "/{id}")
-	public ResponseEntity<?> findByIdBeer(@PathVariable("id") Integer id) {
-		System.out.println("valor   " + id);
-		verifyIfBeerExists(id);
-
-		Beer beer = beerDao.getOne(id);
-		return new ResponseEntity<>(beer, HttpStatus.OK);
-	}
-
-	@PutMapping(path = "/{id}")
-	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> updateBeer(@PathVariable("id") String id, @RequestBody Beer beer) {
-		verifyIfBeerExists(Integer.valueOf(id));
-		beerDao.save(beer);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	@PatchMapping(path = "/{id}")
-	public ResponseEntity<?> changeBeer(@PathVariable("id") String id, @RequestBody Beer beer) {
-		verifyIfBeerExists(Integer.valueOf(id));
-		beerDao.save(beer);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<?> deleteBeer(@PathVariable("id") String id) {
-		verifyIfBeerExists(Integer.valueOf(id));
-		beerDao.delete(Integer.valueOf(id));
+	public ResponseEntity<?> beersIdDelete(@ApiParam(required = true) @PathVariable("id") Integer id) {
+		beerService.delete(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	private void verifyIfBeerExists(Integer id) {
-		if (beerDao.findOne(id) == null)
-			throw new ResourceNotFoundException("Beer Not found by id " + id);
+	@ApiOperation(value = "", nickname = "beersIdGet", notes = "", response = Beer.class, tags = {})
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Status 200", response = Beer.class) })
+	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Beer> beersIdGet(@ApiParam(value = "", required = true) @PathVariable("id") Integer id) {
+		Beer beer = beerService.findOne(id);
+		return new ResponseEntity<>(beer, HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "", nickname = "beersIdPatch", notes = "", tags = {})
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Status 200") })
+	@RequestMapping(path = "/{id}",  method = RequestMethod.PATCH)
+    @Transactional(rollbackFor = Exception.class)
+	public	ResponseEntity<Void> beersIdPatch(@ApiParam(value = "", required = true) @PathVariable("id") Integer id,
+			@ApiParam(value = "", required = true)  @RequestBody BeerDTO body) {
+		    Beer beer = beerService.findOne(id);
+		    beer.setAlcoholContent(body.getAlcoholContent());
+		    beer.setCategory(body.getCategory());
+		    beer.setIngredients(body.getIngredients());
+		    beer.setName(body.getName());
+		    beer.setPrice(body.getPrice());
+		    return new ResponseEntity<Void>(HttpStatus.OK);
+
+	}
+
+	@ApiOperation(value = "", nickname = "beersIdPut", notes = "", tags = {})
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Status 200") })
+	@PutMapping(path = "/{id}")
+	@Transactional(rollbackFor=Exception.class)
+	ResponseEntity<Void> beersIdPut(@ApiParam(value = "", required = true) @PathVariable("id") String id,
+			@ApiParam(value = "", required = true) @Valid @RequestBody Beer body){
+		Beer beer = beerService.save(body);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "", nickname = "beersPost", notes = "", tags = {},response = Beer.class)
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Status 201") })
+	@PostMapping()
+	ResponseEntity<?> beersPost(@ApiParam(value = "", required = true) @Valid @RequestBody Beer body){
+		Beer beer = beerService.save(body);
+		return new ResponseEntity<>(beer,HttpStatus.OK);
 	}
 
 }
