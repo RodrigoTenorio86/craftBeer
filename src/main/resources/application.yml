@@ -1,6 +1,7 @@
 server:
    port: 9000
-   contextPath: /beerhouse
+   servlet:
+    context-path: /beerhouse
 
 spring:
   datasource:
