@@ -1,3 +1,28 @@
 server:
-  port: 9000
-  context-path: /beerhouse
+   port: 9000
+   servlet:
+      contextPath: /beerhouse
+
+spring:
+  datasource:
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1
+    url: jdbc:mysql://localhost:3306/beerhouse?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+    username: root
+    password: Rr123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5Dialect
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    show-sql: true
