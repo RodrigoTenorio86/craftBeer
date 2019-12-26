@@ -18,17 +18,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 public class Beer implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonProperty("id")
 	private Integer id;
 
 	@JsonProperty("name")
-	@NotEmpty(message="Campo nome é Obrigatório.")
+	@Column(nullable = false)
 	private String name;
 
 	@JsonProperty("ingredients")
-	@NotEmpty(message="Campo ingredients é Obrigatório.")
+//	@NotEmpty(message="Campo ingredients é Obrigatório.")
+	@Column(nullable = false)
 	private String ingredients;
 
 	@Column(name = "alcohol_content")

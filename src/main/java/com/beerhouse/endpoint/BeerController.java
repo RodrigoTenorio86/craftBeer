@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +43,7 @@ public class BeerController {
 	@ApiOperation(value = "", nickname = "beersGet", notes = "", response = Beer.class, responseContainer = "List", tags = {})
 	@ApiResponses(value = {	@ApiResponse(code = 200, message = "Status 200", response = Beer.class, responseContainer = "List") })
 	@GetMapping()
+	@Cacheable(value = "beersGet")
 	public ResponseEntity<Page<Beer>> beersGet(@PageableDefault(size=5,page = 0,sort = "price",direction = Direction.ASC) Pageable paginacao) {
 		
 		//Pageable paginacao = PageRequest.of(page, size, Direction.ASC,sort);
@@ -49,14 +52,6 @@ public class BeerController {
 		return new ResponseEntity<>(beers, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "", nickname = "beersIdDelete", notes = "", tags = {})
-	@ApiResponses(value = { @ApiResponse(code = 204, message = "Status 204") })
-	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<?> beersIdDelete(@ApiParam(required = true) @PathVariable("id") Integer id) {
-		beerService.delete(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
 
 	@ApiOperation(value = "", nickname = "beersIdGet", notes = "", response = Beer.class, tags = {})
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Status 200", response = Beer.class) })
@@ -70,6 +65,7 @@ public class BeerController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Status 200") })
 	@RequestMapping(path = "/{id}",  method = RequestMethod.PATCH)
     @Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="beersGet",allEntries = true)
 	public	ResponseEntity<Void> beersIdPatch(@ApiParam(value = "", required = true) @PathVariable("id") Integer id,
 			@ApiParam(value = "", required = true)  @RequestBody BeerDTO body) {
 		    Beer beer = beerService.findById(id).get();
@@ -86,6 +82,7 @@ public class BeerController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Status 200") })
 	@PutMapping(path = "/{id}")
 	@Transactional(rollbackFor=Exception.class)
+	@CacheEvict(value="beersGet",allEntries = true)
 	ResponseEntity<Void> beersIdPut(@ApiParam(value = "", required = true) @PathVariable("id") String id,
 			@ApiParam(value = "", required = true) @Valid @RequestBody Beer body){
 		Beer beer = beerService.save(body);
@@ -95,9 +92,22 @@ public class BeerController {
 	@ApiOperation(value = "", nickname = "beersPost", notes = "", tags = {},response = Beer.class)
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Status 201") })
 	@PostMapping()
+	@CacheEvict(value = "beersGet",allEntries = true)
 	ResponseEntity<?> beersPost(@ApiParam(value = "", required = true) @Valid @RequestBody Beer body){
 		Beer beer = beerService.save(body);
 		return new ResponseEntity<>(beer,HttpStatus.OK);
 	}
+	
+
+	@ApiOperation(value = "", nickname = "beersIdDelete", notes = "", tags = {})
+	@ApiResponses(value = { @ApiResponse(code = 204, message = "Status 204") })
+	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+	@Transactional(rollbackFor = Exception.class)
+	@CacheEvict(value="beersGet" ,allEntries = true)
+	public ResponseEntity<?> beersIdDelete(@ApiParam(required = true) @PathVariable("id") Integer id) {
+		beerService.delete(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
 
 }

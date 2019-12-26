@@ -3,7 +3,7 @@ package com.beerhouse.endpoint.dto;
 import java.math.BigDecimal;
 
 public class BeerDTO {
-
+    
 	private String name;
 	private String ingredients;
 	private String alcoholContent;
