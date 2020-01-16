@@ -1,0 +1,17 @@
+version: '3.1'
+services:
+  db:
+    image: rodrigotenorio86/mysql
+    ports:
+      - "3306:3306"
+    environment:
+       MYSQL_ROOT_PASSWORD: Rr123
+       MYSQL_USER: root
+       MYSQL_DATABASE: beerhouse
+       MYSQL_PASSWORD: Rr123
+
+    healthcheck:
+      test: ["CMD-SHELL", 'mysqladmin ping']
+      interval: 10s
+      timeout: 2s
+      retries: 10 
